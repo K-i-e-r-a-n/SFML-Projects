@@ -38,6 +38,19 @@ void reverseIterateFractal(std::vector<sf::Vertex> &v)
 	}
 }
 
+void colorize(std::vector<sf::Vertex> &v, int colors[3])
+{
+	float step[3];
+	for (int i = 0; i < 3; i++)
+	{
+		step[i] = (float)(colors[i])/v.size();
+	}
+	for (int i = 0; i < v.size(); i++)
+	{
+		v[i].color = sf::Color(colors[0] - step[0]*i, colors[1] - step[1]*i, colors[2] - step[2]*i);
+	}
+}
+
 void iterateFractal(std::vector<sf::Vertex> &points)
 {
 	std::vector<sf::Vertex> copy;
@@ -66,6 +79,7 @@ int main ()
 
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Dragon Fractal Generator");
 	sf::View view = window.getDefaultView();
+	view.setCenter(window.getSize().x/2, window.getSize().y/2);
 
 	points.push_back(sf::Vertex(sf::Vector2f(window.getSize().x/2, window.getSize().y/2), sf::Color::White)); //initial line
 	points.push_back(sf::Vertex(sf::Vector2f(window.getSize().x/2 + 10, window.getSize().y/2), sf::Color::White));
@@ -93,18 +107,36 @@ int main ()
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 			{
-				zoom *= 1.1;
-				view.zoom(zoom);
+				view.zoom(0.5f);
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 			{
-				zoom /= 2.0;
-				view.zoom(zoom);
+				view.zoom(2.0f);
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+			{
+				view.move(0, -100);
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			{
+				view.move(-100, 0);
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+			{
+				view.move(0, 100);
+			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			{
+				view.move(100, 0);
 			}
 		}
 		window.clear();
 		//window.draw();
 		window.setView(view);
+		int colors[3] = {0, 0, 150};
+		int c[3] = {240, 0, 0};
+		colorize(dragon2, colors);
+		colorize(points, c);
 		window.draw(&(dragon2[0]), dragon2.size(), sf::LinesStrip);
 		window.draw(&(points[0]), points.size(), sf::LinesStrip);
 		window.display();
