@@ -1,0 +1,3 @@
+{
+	"shell_cmd": "g++ $file_name -o $file_base_name -I ~/SFML-2.1/include/ -L ~/SFML-2.1/lib/ -lsfml-graphics -lsfml-window -lsfml-system -Wl,-rpath,/home/wash/SFML-2.1/lib/ -std=c++11"
+}
